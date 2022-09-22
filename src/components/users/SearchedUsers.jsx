@@ -1,25 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import GithubContext from "../../context/github/GithubContext";
 import UserCard from "./UserCard";
 
 function SearchedUsers() {
-  const [users, setUsers] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { users, fetchUsers, isLoaded } = useContext(GithubContext);
   useEffect(() => {
-    fetch(process.env.REACT_APP_GITHUB_URL + "/users", {
-      headers: {
-        Authorization: "token " + process.env.REACT_APP_GITHUB_API_TOKEN,
-      },
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setUsers(result);
-          setIsLoaded(true);
-        },
-        (error) => {
-          alert("Ooops! there is an error");
-        }
-      );
+    fetchUsers();
   }, []);
 
   if (!isLoaded) {
