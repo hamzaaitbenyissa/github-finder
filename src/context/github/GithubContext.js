@@ -1,40 +1,39 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
+import GithubReducer from "./GithubReducer";
 
 const GithubContext = createContext();
+const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
+const API_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
 export const GithubProvider = ({ children }) => {
-  const [users, setUsers] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const initialState = {
+    users: [],
+    isLoaded: false,
+  };
+  const [state, dispatch] = useReducer(GithubReducer, initialState);
 
-  const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
-  const API_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const fetchUsers = async () => {
-    const res = await fetch(GITHUB_URL + "/search/users?q=hamzaait", {
+    const res = await fetch(GITHUB_URL + "/search/users?q=an", {
       headers: {
         Authorization: "token " + API_TOKEN,
       },
     });
     const result = await res.json();
-    setUsers(result.items);
-    setIsLoaded(true);
+    dispatch({
+      payload: result.items,
+      type: "GET_USERS",
+    });
   };
-
-  // const fetchUserDetails = async (name) => {
-  //   const res = await fetch(GITHUB_URL + "/users/" + name, {
-  //     headers: {
-  //       Authorization: "token " + API_TOKEN,
-  //     },
-  //   });
-  //   const result = await res.json();
-  // };
 
   return (
     <GithubContext.Provider
       value={{
-        users,
-        fetchUsers,
-        isLoaded,
+        users: state.users,
+        isLoaded: state.isLoaded,
       }}
     >
       {children}

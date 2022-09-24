@@ -3,10 +3,8 @@ import GithubContext from "../../context/github/GithubContext";
 import UserCard from "./UserCard";
 
 function SearchedUsers() {
-  const { users, fetchUsers, isLoaded } = useContext(GithubContext);
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const { users, isLoaded } = useContext(GithubContext);
+  useEffect(() => {}, []);
 
   if (!isLoaded) {
     return <div>Loading...</div>;
