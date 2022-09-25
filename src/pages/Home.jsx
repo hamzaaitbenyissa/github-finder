@@ -1,11 +1,13 @@
 import SearchedUsers from "../components/users/SearchedUsers";
+import SearchForm from "../components/users/SearchForm";
 
 function Home() {
   return (
-// search bar to add 
-    <SearchedUsers />
-
-  )
+    <>
+      <SearchForm />
+      <SearchedUsers />
+    </>
+  );
 }
 
 export default Home;

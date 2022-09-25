@@ -4,9 +4,9 @@ import UserCard from "./UserCard";
 
 function SearchedUsers() {
   const { users, isLoaded } = useContext(GithubContext);
-  useEffect(() => {}, []);
 
-  if (!isLoaded) {
+  if (isLoaded == null) {
+  } else if (!isLoaded) {
     return <div>Loading...</div>;
   } else {
     return (
