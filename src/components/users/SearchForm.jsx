@@ -33,7 +33,7 @@ function SearchForm() {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search for"
+                  placeholder="Search ..."
                   className="input input-lg pr-40  input-bordered w-full"
                   value={text}
                   onChange={handlechange}
