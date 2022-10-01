@@ -9,6 +9,7 @@ export const GithubProvider = ({ children }) => {
   const initialState = {
     users: [],
     isLoaded: null,
+    user: {},
   };
   const [state, dispatch] = useReducer(GithubReducer, initialState);
 
@@ -37,12 +38,27 @@ export const GithubProvider = ({ children }) => {
       type: "RESET",
     });
   };
+
+  const getUser = async (input) => {
+    const res = await fetch(GITHUB_URL + "/users/" + input, {
+      headers: {
+        Authorization: "token " + API_TOKEN,
+      },
+    });
+    const result = await res.json();
+    dispatch({
+      payload: result,
+      type: "GET_USER",
+    });
+  };
   return (
     <GithubContext.Provider
       value={{
         users: state.users,
         isLoaded: state.isLoaded,
+        user: state.user,
         fetchUsers,
+        getUser,
         clearSearch,
       }}
     >

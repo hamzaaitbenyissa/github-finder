@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
+import UserProfail from "./components/users/UserProfail";
 import { GithubProvider } from "./context/github/GithubContext";
 import About from "./pages/About";
 import Home from "./pages/Home";
@@ -15,6 +16,7 @@ function App() {
         <main className="container mx-auto px-3 pb-12">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/users/:login" element={<UserProfail />} />
             <Route path="/about" element={<About />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
