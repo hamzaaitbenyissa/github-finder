@@ -2,9 +2,11 @@ import React, { useContext, useState } from "react";
 import GithubContext from "../../context/github/GithubContext";
 import Alert from "../layout/Alert";
 
+import { fetchUsers } from "../../context/github/GithubAction";
+
 function SearchForm() {
   const [text, setText] = useState("");
-  const { fetchUsers, isLoaded, clearSearch } = useContext(GithubContext);
+  const { isLoaded, dispatch } = useContext(GithubContext);
   const [alert, setAlert] = useState(false);
 
   const handlechange = (e) => {
@@ -12,12 +14,19 @@ function SearchForm() {
     setText(e.target.value);
   };
 
-  const handlesubmit = (e) => {
+  const handlesubmit = async (e) => {
     e.preventDefault();
     if (text.trim() === "") {
       setAlert(true);
     } else {
-      fetchUsers(text);
+      dispatch({
+        type: "SET_LOADING",
+      });
+      const users = await fetchUsers(text);
+      dispatch({
+        payload: users,
+        type: "GET_USERS",
+      });
       setText("");
     }
   };
@@ -53,7 +62,9 @@ function SearchForm() {
         {isLoaded && (
           <div>
             <button
-              onClick={clearSearch}
+              onClick={() => {
+                dispatch({ type: "RESET" });
+              }}
               className="btn btn-outline btn-warning btn-lg"
             >
               Clear

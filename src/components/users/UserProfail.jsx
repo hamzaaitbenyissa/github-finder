@@ -3,16 +3,34 @@ import { Link, useParams } from "react-router-dom";
 import GithubContext from "../../context/github/GithubContext";
 import { FaCodepen, FaUserFriends, FaUsers } from "react-icons/fa";
 import ReopList from "../repos/RepoList";
+import { getUser, getUserRepos } from "../../context/github/GithubAction";
 
 function UserProfail() {
   let { login } = useParams();
-  const { getUser, user, getUserRepos, userrepos } = useContext(GithubContext);
+  const { user, dispatch, userrepos } = useContext(GithubContext);
 
   // this function will be executed once the componenet is created and
   useEffect(() => {
-    getUser(login);
-    getUserRepos(login);
-  }, []);
+    dispatch({
+      type: "SET_LOADING",
+    });
+
+    const getUserdetails = async () => {
+      const user = await getUser(login);
+      dispatch({
+        payload: user,
+        type: "GET_USER",
+      });
+
+      const userrepos = await getUserRepos(login);
+      dispatch({
+        payload: userrepos,
+        type: "GET_USER_REPOS",
+      });
+    };
+
+    getUserdetails();
+  }, [dispatch, useParams().login]);
 
   const {
     name,

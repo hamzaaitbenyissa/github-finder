@@ -11,12 +11,14 @@ const GithubReducer = (state, action) => {
       return {
         ...state,
         user: action.payload,
+        isLoaded: true,
       };
 
     case "GET_USER_REPOS":
       return {
         ...state,
         userrepos: action.payload,
+        isLoaded: true,
       };
 
     case "SET_LOADING":
