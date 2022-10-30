@@ -1,25 +1,23 @@
+import axios from "axios";
+
 const GITHUB_URL = process.env.REACT_APP_GITHUB_URL;
 const API_TOKEN = process.env.REACT_APP_GITHUB_API_TOKEN;
 
-export const fetchUsers = async (input) => {
-  const res = await fetch(GITHUB_URL + "/search/users?q=" + input, {
-    headers: {
-      Authorization: "token " + API_TOKEN,
-    },
-  });
+const githubRequest = axios.create({
+  baseURL: GITHUB_URL,
+  headers: {
+    Authorization: "token " + API_TOKEN,
+  },
+});
 
-  const result = await res.json();
-  return result.items;
+export const fetchUsers = async (input) => {
+  const result = await githubRequest.get("/search/users?q=" + input);
+  return result.data.items;
 };
 
 export const getUser = async (input) => {
-  const res = await fetch(GITHUB_URL + "/users/" + input, {
-    headers: {
-      Authorization: "token " + API_TOKEN,
-    },
-  });
-  const result = await res.json();
-  return result;
+  const result = await githubRequest.get(GITHUB_URL + "/users/" + input);
+  return result.data;
 };
 
 export const getUserRepos = async (input) => {
@@ -28,11 +26,6 @@ export const getUserRepos = async (input) => {
     per_page: 5,
   });
 
-  const res = await fetch(GITHUB_URL + "/users/" + input + "/repos?" + params, {
-    headers: {
-      Authorization: "token " + API_TOKEN,
-    },
-  });
-  const result = await res.json();
-  return result;
+  const result = await githubRequest.get("/users/" + input + "/repos?" + params);
+  return result.data;
 };
